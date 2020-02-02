@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import './App.css';
 
@@ -9,7 +9,17 @@ function App() {
   const [drawing, setDrawing] = useState(false);
   const [current, setCurrent] = useState({ color: 'black' });
   const canvasRef = React.useRef(null);
-  socket.on('drawing', onDrawingEvent);
+  useEffect(() => {
+    function onDrawingEvent(data) {
+      const canvas = canvasRef.current
+      const context = canvas.getContext('2d')
+      const w = canvas.width;
+      const h = canvas.height;
+      drawLine(context, data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color);
+    }
+
+    socket.on('drawing', onDrawingEvent);
+  }, []);
 
   function drawLine(context, x0, y0, x1, y1, color, emit) {
     context.beginPath();
@@ -32,14 +42,6 @@ function App() {
       y1: y1 / h,
       color: color
     });
-  }
-
-  function onDrawingEvent(data) {
-    const canvas = canvasRef.current
-    const context = canvas.getContext('2d')
-    const w = canvas.width;
-    const h = canvas.height;
-    drawLine(context, data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color);
   }
 
   function onMouseDown(e) {
