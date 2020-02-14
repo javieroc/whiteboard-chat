@@ -4,10 +4,17 @@ import './Whiteboard.css';
 
 const socket = io('http://localhost:3000');
 
+const colors = {
+  cyan: '#36C5F4',
+  magenta: '#ED4598',
+  green: '#8AFF00',
+  orange: '#F05222',
+  yellow: '#FFFF00',
+};
 
 function Whiteboard() {
   const [drawing, setDrawing] = useState(false);
-  const [current, setCurrent] = useState({ color: 'black' });
+  const [current, setCurrent] = useState({ color: colors['cyan'] });
   const canvasRef = React.useRef(null);
   useEffect(() => {
     function onDrawingEvent(data) {
@@ -49,7 +56,7 @@ function Whiteboard() {
     const canvas = canvasRef.current
     const posX = e.clientX - canvas.offsetLeft;
     const posY = e.clientY - canvas.offsetTop;
-    setCurrent({ x: posX, y: posY });
+    setCurrent({ ...current, x: posX, y: posY });
   }
 
   function onMouseUp(e) {
@@ -69,7 +76,12 @@ function Whiteboard() {
     const posX = e.clientX - canvas.offsetLeft;
     const posY = e.clientY - canvas.offsetTop;
     drawLine(context, current.x, current.y, posX, posY, current.color, true);
-    setCurrent({ x: posX, y: posY });
+    setCurrent({ ...current, x: posX, y: posY });
+  }
+
+  function onColorClick(e) {
+    const color = colors[e.target.className.split(' ')[1]];
+    setCurrent({ ...current, color });
   }
 
   return (
@@ -77,8 +89,8 @@ function Whiteboard() {
       <canvas
         className="whiteboard"
         ref={canvasRef}
-        width={1200}
-        height={800}
+        width={1000}
+        height={600}
         onMouseDown={onMouseDown}
         onMouseUp={onMouseUp}
         onMouseOut={onMouseUp}
@@ -88,6 +100,13 @@ function Whiteboard() {
         onTouchCancel={onMouseUp}
         onTouchMove={onMouseMove}
       />
+      <div className="colors">
+        <div className="color cyan" onClick={onColorClick} />
+        <div className="color magenta" onClick={onColorClick} />
+        <div className="color green" onClick={onColorClick} />
+        <div className="color orange" onClick={onColorClick} />
+        <div className="color yellow" onClick={onColorClick} />
+      </div>
     </div>
   )
 }

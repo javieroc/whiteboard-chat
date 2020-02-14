@@ -2,7 +2,13 @@
  * Canvas
  */
 
- .whiteboard {
+.whiteboard {
+  box-shadow:
+  0 0 0.1vw 0.1vw #fff7f7,
+  0 0   2vw 0.3vw #36C5F4,
+  inset 0 0 1.5vw 0.2vw #36C5F4,
+  inset 0 0 0.5vw 0.1vw #fff7f7;
+  border-radius: 1.5rem;
 }
 
 .colors {
@@ -15,8 +21,15 @@
   width: 48px;
 }
 
-.color.black { background-color: black; }
-.color.red { background-color: red; }
-.color.green { background-color: green; }
-.color.blue { background-color: blue; }
-.color.yellow { background-color: yellow; }
+.colors {
+  margin: 5px;
+}
+.color {
+  margin: 2px;
+}
+
+.color.cyan { background-color: #36C5F4; }
+.color.magenta { background-color: #ED4598; }
+.color.green { background-color: #8AFF00; }
+.color.orange { background-color: #F05222; }
+.color.yellow { background-color: #FFFF00; }
